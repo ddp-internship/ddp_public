@@ -156,7 +156,7 @@ export const Navbar = () => {
 
         {/* --- ACTION BUTTON --- */}
         <div className="flex items-center gap-4">
-          <a href="http://localhost:3000/" target="_blank" rel="noreferrer" className="hidden md:flex items-center gap-2 bg-[#111827] text-white px-7 py-3 rounded-full font-black uppercase tracking-widest text-[9px] shadow-xl hover:bg-[#E3242B] transition-all transform hover:-translate-y-1">
+          <a href="https://ddppublic.vercel.app/" target="_blank" rel="noreferrer" className="hidden md:flex items-center gap-2 bg-[#111827] text-white px-7 py-3 rounded-full font-black uppercase tracking-widest text-[9px] shadow-xl hover:bg-[#E3242B] transition-all transform hover:-translate-y-1">
             <ShieldCheck size={14} className="text-[#E3242B]" /> PORTAL ADMIN
           </a>
           <button className="lg:hidden text-[#E3242B]" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
@@ -177,7 +177,7 @@ export const Navbar = () => {
                 {item === 'testimonials' ? 'TESTIMONIALS' : item.toUpperCase()}
             </button>
           ))}
-          <a href="http://localhost:3000/" target="_blank" rel="noreferrer" className="flex items-center justify-center gap-2 w-full bg-[#E3242B] text-white py-5 rounded-2xl font-black text-[10px] tracking-[0.2em] shadow-lg shadow-red-900/20 uppercase">
+          <a href="https://ddppublic.vercel.app/" target="_blank" rel="noreferrer" className="flex items-center justify-center gap-2 w-full bg-[#E3242B] text-white py-5 rounded-2xl font-black text-[10px] tracking-[0.2em] shadow-lg shadow-red-900/20 uppercase">
              <ShieldCheck size={16}/> MASUK PORTAL ADMIN
           </a>
         </div>
