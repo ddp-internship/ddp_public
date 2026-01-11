@@ -1,37 +1,44 @@
 import React from 'react';
 import { Zap, LayoutGrid, ArrowUpRight, ShieldCheck } from 'lucide-react';
 
+// 1. Tambahkan properti 'link' ke interface AppItem
 interface AppItem {
   name: string;
   desc: string;
   img: string;
   tag: string;
+  link: string; // Tautan tujuan
 }
 
+// 2. Tambahkan tautan ke data apps
 const apps: AppItem[] = [
   { 
     name: 'Merdesa Sensus', 
     desc: 'Aplikasi sensus keluarga partisipatif terintegrasi data spasial untuk profil penduduk.',
     img: '/img/apps/logo-sensus.png', 
-    tag: 'Sensus Digital'
+    tag: 'Sensus Digital',
+    link: 'https://play.google.com/store/apps/details?id=id.desapresisi.merdesasensus&hl=en' // Contoh link 1
   },
   { 
     name: 'Merdesa Maps', 
     desc: 'Teknologi pemetaan partisipatif untuk pendataan sarana, vegetasi, dan batas wilayah presisi.',
     img: '/img/apps/logo-maps.png', 
-    tag: 'Geospasial'
+    tag: 'Geospasial',
+    link: 'https://play.google.com/store/apps/details?id=id.desapresisi.merdesamaps&hl=id' // Contoh link 2
   },
   { 
     name: 'Merdesa Monev', 
     desc: 'Sistem monitoring untuk memantau progres dan kualitas hasil pendataan lapangan real-time.',
     img: '/img/apps/logo-monev.png', 
-    tag: 'Pemantauan'
+    tag: 'Pemantauan',
+    link: 'https://monev.desapresisi.id/signin' // Contoh link 3
   },
   { 
     name: 'Merdesa WebGIS', 
     desc: 'Dashboard analisis data desa untuk pemangku kebijakan melihat capaian pembangunan.',
     img: '/img/apps/logo-webgis.png', 
-    tag: 'Analitik'
+    tag: 'Analitik',
+    link: 'https://webgis.desapresisi.id/account/login' // Contoh link 4
   },
 ];
 
@@ -65,7 +72,14 @@ export const Features = () => {
           <div className="lg:col-span-7 order-2 lg:order-1">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               {apps.map((app, i) => (
-                <div key={i} className="group bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm hover:shadow-xl hover:border-[#E3242B]/20 transition-all duration-500 flex flex-col h-full text-center lg:text-left items-center lg:items-start justify-between">
+                // 3. Bungkus item dengan tag <a> dan tambahkan href, target="_blank" untuk membuka di tab baru
+                <a 
+                  key={i} 
+                  href={app.link} 
+                  target="_blank" 
+                  rel="noopener noreferrer" // Penting untuk keamanan saat menggunakan target="_blank"
+                  className="group bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm hover:shadow-xl hover:border-[#E3242B]/20 transition-all duration-500 flex flex-col h-full text-center lg:text-left items-center lg:items-start justify-between cursor-pointer"
+                >
                    
                    <div className="space-y-6 w-full">
                       <div className="flex flex-col lg:flex-row justify-between items-center gap-4">
@@ -93,7 +107,7 @@ export const Features = () => {
                          Lihat Detail <ArrowUpRight size={12} />
                       </div>
                    </div>
-                </div>
+                </a>
               ))}
             </div>
           </div>
