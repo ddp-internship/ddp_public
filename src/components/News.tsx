@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom'; // Tambahkan useSearchParams
 import { 
-  ArrowRight, X, Clock, Newspaper, 
-  ChevronLeft, ChevronRight, Zap, Hash, 
-  ShieldCheck, Tag, ArrowUpRight, MonitorPlay,
-  User, Bookmark, Share2
+  ArrowRight, X, Clock, Newspaper, Zap, Hash, 
+  ShieldCheck, Tag, ArrowUpRight, MonitorPlay, Share2
 } from 'lucide-react';
-import { api } from '../api'; // Tanpa getStorageUrl karena pakai gambar_url langsung
+import { api, getStorageUrl } from '../api';
 
 export const News = () => {
   // --- STATE MANAGEMENT ---
@@ -15,6 +13,9 @@ export const News = () => {
   const [totalBerita, setTotalBerita] = useState(0);
   const [loading, setLoading] = useState(true);
   const [selectedNews, setSelectedNews] = useState<any>(null);
+  
+  // LOGIKA URL: Untuk mendeteksi id berita dari link yang di-share
+  const [searchParams, setSearchParams] = useSearchParams();
 
   // --- FETCH DATA ---
   useEffect(() => {
@@ -24,6 +25,13 @@ export const News = () => {
         setItems(newsRes.data);
         const countRes = await api.get('/public/berita/count');
         setTotalBerita(countRes.data.total);
+
+        // AUTO-OPEN: Cek apakah di URL ada ID berita yang di-share
+        const newsId = searchParams.get('newsId');
+        if (newsId && newsRes.data.length > 0) {
+            const found = newsRes.data.find((n: any) => n.id === parseInt(newsId));
+            if (found) setSelectedNews(found);
+        }
       } catch (error) {
         console.error("Gagal sinkronisasi data");
       } finally {
@@ -31,14 +39,17 @@ export const News = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [searchParams]);
 
-  // --- FUNGSI SHARE PINTAR (AKTIF) ---
+  // --- FUNGSI SHARE PINTAR (AKTIF DENGAN TARGET ID) ---
   const handleShare = async (news: any) => {
+    // Buat link khusus yang menyertakan ID berita
+    const shareUrl = `${window.location.origin}${window.location.pathname}?newsId=${news.id}`;
+    
     const shareData = {
       title: news.judul_artikel,
-      text: `Baca warta terbaru dari Lab DDP IPB University: ${news.judul_artikel}`,
-      url: window.location.href,
+      text: `Warta DDP: ${news.judul_artikel}`,
+      url: shareUrl,
     };
 
     try {
@@ -49,11 +60,16 @@ export const News = () => {
         window.open(waLink, '_blank');
       }
     } catch (err) {
-      console.log("Proses share dibatalkan.");
+      console.log("Share dibatalkan.");
     }
   };
 
-  // Lock scroll body saat modal aktif
+  // Tutup Modal & Bersihkan URL
+  const closeNews = () => {
+    setSelectedNews(null);
+    setSearchParams({}); // Hapus newsId dari alamat browser
+  };
+
   useEffect(() => {
     document.body.style.overflow = selectedNews ? 'hidden' : 'auto';
   }, [selectedNews]);
@@ -78,11 +94,9 @@ export const News = () => {
       <div className="max-w-7xl mx-auto relative z-10">
         
         {/* --- 1. HEADER --- */}
-        <div className="flex flex-col lg:flex-row justify-between items-center lg:items-end gap-8 mb-16 pb-10 border-b border-gray-100">
-          <div className="space-y-3 text-center lg:text-left">
-            <div className="flex items-center justify-center lg:justify-start gap-2">
-               <span className="text-[10px] font-black text-[#E3242B] uppercase tracking-[0.3em]">Pusat Media</span>
-            </div>
+        <div className="flex flex-col lg:flex-row justify-between items-center lg:items-end gap-8 mb-16 pb-10 border-b border-gray-100 text-left">
+          <div className="space-y-3 w-full">
+            <span className="text-[10px] font-black text-[#E3242B] uppercase tracking-[0.3em]">Pusat Media</span>
             <h2 className="text-3xl md:text-4xl font-black text-[#111827] tracking-tighter uppercase leading-none">
               Pusat <span className="text-[#E3242B]">Warta.</span>
             </h2>
@@ -91,17 +105,16 @@ export const News = () => {
             </p>
           </div>
           
-          <Link to="/news" className="group flex items-center gap-3 px-8 py-4 bg-[#111827] text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-[#E3242B] transition-all duration-500 shadow-xl shadow-navy/20 active:scale-95">
-           Jelajahi Arsip Publikasi <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+          <Link to="/news" className="group flex items-center gap-3 px-8 py-4 bg-[#111827] text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-[#E3242B] transition-all duration-500 shadow-xl shadow-navy/20 active:scale-95 shrink-0">
+           Arsip Publikasi <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
 
-        {/* --- 2. MAIN CONTENT GRID (DENGAN GAMBAR_URL) --- */}
+        {/* --- 2. MAIN CONTENT GRID --- */}
         <div className="grid lg:grid-cols-12 gap-12 items-start">
           <div className="lg:col-span-8 space-y-12">
             {/* Headline Card */}
             <div onClick={() => setSelectedNews(items[0])} className="group cursor-pointer relative rounded-[3rem] overflow-hidden shadow-2xl transition-all duration-1000 h-[450px] border-4 border-white bg-gray-50">
-              {/* MENGGUNAKAN GAMBAR_URL LANGSUNG */}
               <img src={items[0].gambar_url} className="w-full h-full object-cover transition-transform duration-[2000ms] group-hover:scale-105" alt="Headline" />
               <div className="absolute inset-0 bg-gradient-to-t from-[#111827] via-[#111827]/20 to-transparent"></div>
               <div className="absolute bottom-10 left-10 right-10 space-y-4 text-left">
@@ -116,7 +129,6 @@ export const News = () => {
                 {items.slice(1, 3).map((news) => (
                     <div key={news.id} onClick={() => setSelectedNews(news)} className="group cursor-pointer space-y-6 text-left">
                         <div className="relative aspect-video rounded-[2.5rem] overflow-hidden shadow-xl border-4 border-white bg-gray-50">
-                            {/* MENGGUNAKAN GAMBAR_URL LANGSUNG */}
                             <img src={news.gambar_url} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" alt="News" />
                         </div>
                         <div className="px-2 space-y-3">
@@ -131,10 +143,10 @@ export const News = () => {
           </div>
 
           {/* SIDEBAR */}
-          <div className="lg:col-span-4 space-y-8">
+          <div className="lg:col-span-4 space-y-8 text-left">
             <div className="bg-[#111827] rounded-[3.5rem] p-10 text-white relative overflow-hidden shadow-2xl border border-white/5">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-[#E3242B] opacity-10 blur-3xl"></div>
-                <div className="relative z-10 space-y-8 text-left">
+                <div className="relative z-10 space-y-8">
                     <div className="flex items-center gap-3">
                         <div className="w-10 h-10 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10 shadow-lg">
                             <MonitorPlay size={18} className="text-[#E3242B]" />
@@ -147,7 +159,7 @@ export const News = () => {
                     <h4 className="font-black uppercase text-[11px] tracking-widest text-white leading-tight">Dokumenter Pendataan Desa Presisi Nasional</h4>
                 </div>
             </div>
-            <div className="p-8 bg-gray-50 rounded-[3rem] border border-gray-100 shadow-inner space-y-4 text-left">
+            <div className="p-8 bg-gray-50 rounded-[3rem] border border-gray-100 shadow-inner space-y-4">
                 <div className="flex items-center justify-between">
                     <div className="w-12 h-12 bg-white text-[#E3242B] rounded-2xl flex items-center justify-center shadow-md"><Hash size={20} /></div>
                     <span className="text-3xl font-black text-[#111827] tracking-tighter">{totalBerita}</span>
@@ -158,14 +170,14 @@ export const News = () => {
         </div>
       </div>
 
-      {/* --- 3. THE IMMERSIVE EDITORIAL READER (DENGAN GAMBAR_URL) --- */}
+      {/* --- 3. THE IMMERSIVE EDITORIAL READER (REFINED SPACING) --- */}
       {selectedNews && createPortal(
         <div className="fixed inset-0 z-[100000] flex items-center justify-center">
-          <div className="absolute inset-0 bg-[#0a0f1a]/98 backdrop-blur-3xl animate-fade-in" onClick={() => setSelectedNews(null)}></div>
+          <div className="absolute inset-0 bg-[#0a0f1a]/98 backdrop-blur-3xl animate-fade-in" onClick={closeNews}></div>
           
           <div className="relative bg-white w-full h-full md:max-w-6xl md:h-[90vh] md:rounded-[4rem] overflow-hidden shadow-[0_60px_120px_rgba(0,0,0,0.5)] flex flex-col animate-in zoom-in-95 duration-500 border border-white/10">
             
-            {/* Header Modal */}
+            {/* Header Modal (Statis) */}
             <div className="flex items-center justify-between px-8 md:px-14 py-6 bg-white border-b sticky top-0 z-50">
                 <div className="flex items-center gap-4 text-left">
                     <span className="bg-[#E3242B] text-white px-4 py-1 rounded-full font-black text-[9px] uppercase tracking-widest">{selectedNews.kategori}</span>
@@ -173,13 +185,8 @@ export const News = () => {
                     <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest hidden sm:block">Lab DDP IPB Press Release</span>
                 </div>
                 <div className="flex items-center gap-2">
-                    <button 
-                      onClick={() => handleShare(selectedNews)}
-                      className="p-2.5 text-gray-400 hover:text-[#E3242B] hover:bg-red-50 rounded-xl transition-all"
-                    >
-                      <Share2 size={20}/>
-                    </button>
-                    <button onClick={() => setSelectedNews(null)} className="p-2.5 bg-gray-100 text-gray-400 hover:text-[#E3242B] rounded-full transition-all"><X size={24}/></button>
+                    <button onClick={() => handleShare(selectedNews)} className="p-2.5 text-gray-400 hover:text-[#E3242B] hover:bg-red-50 rounded-xl transition-all"><Share2 size={20}/></button>
+                    <button onClick={closeNews} className="p-2.5 bg-gray-100 text-gray-400 hover:text-[#E3242B] rounded-full transition-all"><X size={24}/></button>
                 </div>
             </div>
 
@@ -188,59 +195,58 @@ export const News = () => {
                 <div className="max-w-5xl mx-auto flex flex-col items-center">
                     
                     <div className="w-full aspect-video md:aspect-[21/9] overflow-hidden relative border-b border-gray-100 bg-gray-50">
-                        {/* MENGGUNAKAN GAMBAR_URL LANGSUNG */}
                         <img src={selectedNews.gambar_url} className="w-full h-full object-cover" alt="Hero" />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
                     </div>
 
-                    <div className="w-full px-6 md:px-20 py-12 md:py-20 space-y-12 text-left text-[#111827]">
-                        <div className="space-y-8 max-w-4xl">
-                            <h1 className="text-3xl md:text-6xl font-black tracking-tighter leading-[1.05] uppercase">
+                    {/* REVISI SPASI: Mengurangi py-12 md:py-20 menjadi py-8 md:py-10 */}
+                    <div className="w-full px-6 md:px-20 py-8 md:py-10 space-y-10 text-left text-[#111827]">
+                        
+                        {/* Title Section */}
+                        <div className="space-y-6 max-w-4xl">
+                            <h1 className="text-3xl md:text-5xl font-black text-[#111827] tracking-tighter leading-[1.05] uppercase">
                                 {selectedNews.judul_artikel}
                             </h1>
-                            <div className="flex flex-wrap items-center gap-6 py-8 border-y border-gray-100 uppercase">
+                            
+                            {/* REVISI SPASI: Mengurangi py-8 menjadi py-5 */}
+                            <div className="flex flex-wrap items-center gap-6 py-5 border-y border-gray-100 uppercase">
                                 <div className="flex items-center gap-3">
-                                    <div className="w-12 h-12 bg-[#111827] text-[#E3242B] rounded-2xl flex items-center justify-center font-black text-lg shadow-xl transform -rotate-3">{selectedNews.penulis.charAt(0)}</div>
+                                    <div className="w-10 h-10 bg-[#111827] text-[#E3242B] rounded-xl flex items-center justify-center font-black text-sm uppercase shadow-lg">{selectedNews.penulis.charAt(0)}</div>
                                     <div className="space-y-0.5">
-                                        <p className="text-[9px] font-black text-gray-400 tracking-widest">Penulis Redaksi</p>
-                                        <p className="text-sm font-black">{selectedNews.penulis}</p>
+                                        <p className="text-[8px] font-black text-gray-400 uppercase tracking-widest">Penulis</p>
+                                        <p className="text-xs font-black text-[#111827] uppercase">{selectedNews.penulis}</p>
                                     </div>
                                 </div>
-                                <div className="h-10 w-px bg-gray-100 hidden sm:block"></div>
+                                <div className="h-8 w-px bg-gray-100 hidden sm:block"></div>
                                 <div className="space-y-0.5">
-                                    <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Diterbitkan Pada</p>
-                                    <p className="text-sm font-black text-[#E3242B]">{selectedNews.tanggal}</p>
+                                    <p className="text-[8px] font-black text-gray-400 uppercase tracking-widest">Terbit Pada</p>
+                                    <p className="text-xs font-black text-[#E3242B] uppercase">{selectedNews.tanggal}</p>
                                 </div>
                             </div>
                         </div>
 
                         {/* Narasi Teks */}
-                        <div className="text-gray-700 text-lg md:text-2xl leading-[2] md:leading-[2.4] font-medium text-left tracking-normal whitespace-pre-line relative z-10">
-                            <div className="absolute top-40 left-1/2 -translate-x-1/2 -z-10 opacity-[0.03] select-none text-[15rem] font-black pointer-events-none uppercase tracking-tighter">
-                                DDP
-                            </div>
-                            
+                        {/* REVISI SPASI: Mengurangi mb-12 menjadi mb-6 */}
+                        <div className="text-gray-700 text-lg md:text-2xl leading-[1.8] md:leading-[2.2] font-medium text-left tracking-normal whitespace-pre-line relative z-10">
                             {selectedNews.isi_artikel.split('\n').map((para: string, i: number) => (
-                                <p key={i} className={`mb-12 ${i === 0 ? "first-letter:text-8xl md:first-letter:text-[12rem] first-letter:font-black first-letter:text-[#E3242B] first-letter:mr-6 first-letter:float-left first-letter:leading-none first-letter:mt-4" : ""}`}>
+                                <p key={i} className={`mb-6 ${i === 0 ? "first-letter:text-8xl md:first-letter:text-[10rem] first-letter:font-black first-letter:text-[#E3242B] first-letter:mr-6 first-letter:float-left first-letter:leading-none first-letter:mt-2" : ""}`}>
                                     {para}
                                 </p>
                             ))}
                         </div>
 
-                        {/* Footer Branding */}
-                        <div className="pt-20 border-t border-gray-100 flex flex-col md:flex-row items-center justify-between gap-8 opacity-60">
+                        <div className="pt-10 border-t border-gray-100 flex flex-col md:flex-row items-center justify-between gap-8 opacity-60">
                             <div className="flex items-center gap-4">
-                                <ShieldCheck size={32} className="text-emerald-500" />
+                                <ShieldCheck size={28} className="text-emerald-500" />
                                 <div className="space-y-1 text-left">
-                                    <span className="text-[11px] font-black uppercase tracking-widest">Verified Press Release</span>
-                                    <p className="text-[9px] font-bold text-gray-400 uppercase">Dokumen Resmi Laboratory Data Desa Presisi IPB University.</p>
+                                    <span className="text-[10px] font-black uppercase tracking-widest">Verified Press Release</span>
+                                    <p className="text-[8px] font-bold text-gray-400 uppercase leading-none">Official Laboratory Data Desa Presisi IPB University.</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
           </div>
         </div>,
         document.body
