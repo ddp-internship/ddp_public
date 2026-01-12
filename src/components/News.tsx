@@ -195,7 +195,8 @@ export const News = () => {
                         </div>
 
                         {/* Narasi Utama (Fokus Readability) */}
-                        <div className="text-gray-700 text-lg md:text-2xl leading-[2] md:leading-[2.4] font-medium text-justify tracking-normal whitespace-pre-line relative z-10">
+                        {/* Perubahan: text-justify diganti menjadi text-left */}
+                        <div className="text-gray-700 text-lg md:text-2xl leading-[2] md:leading-[2.4] font-medium text-left tracking-normal whitespace-pre-line relative z-10">
                             {/* Watermark di dalam teks agar premium */}
                             <div className="absolute top-40 left-1/2 -translate-x-1/2 -z-10 opacity-[0.03] select-none text-[15rem] font-black pointer-events-none uppercase tracking-tighter">
                                 DDP

@@ -214,7 +214,8 @@ export const NewsPage = () => {
                         </div>
                     </div>
 
-                    <div className="text-gray-700 text-base md:text-xl leading-[1.8] md:leading-[2.2] font-medium text-justify tracking-normal whitespace-pre-line">
+                    {/* PERUBAHAN DI SINI: text-justify diganti menjadi text-left */}
+                    <div className="text-gray-700 text-base md:text-xl leading-[1.8] md:leading-[2.2] font-medium text-left tracking-normal whitespace-pre-line">
                         {selectedNews.isi_artikel.split('\n').map((para: string, i: number) => (
                             <p key={i} className={`mb-8 ${i === 0 ? "md:first-letter:text-9xl md:first-letter:font-black md:first-letter:text-[#E3242B] md:first-letter:mr-6 md:first-letter:float-left md:first-letter:leading-none md:first-letter:mt-3" : ""}`}>
                                 {para}
