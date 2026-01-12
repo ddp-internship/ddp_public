@@ -173,7 +173,7 @@ export const News = () => {
                     <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest hidden sm:block">Lab DDP IPB Press Release</span>
                 </div>
                 <div className="flex items-center gap-2">
-                    {/* TOMBOL SHARE AKTIF (Sesuai Permintaan Mas) */}
+                    {/* TOMBOL SHARE AKTIF */}
                     <button 
                       onClick={() => handleShare(selectedNews)}
                       className="p-2.5 text-gray-400 hover:text-[#E3242B] hover:bg-red-50 rounded-xl transition-all"
