@@ -13,7 +13,7 @@ export const News = () => {
   const [loading, setLoading] = useState(true);
   const [selectedNews, setSelectedNews] = useState<any>(null);
   
-  // SOP: Membaca parameter dari URL (misal: ?newsId=10)
+  //  Membaca parameter dari URL 
   const [searchParams, setSearchParams] = useSearchParams();
 
   // --- 1. AMBIL DATA DARI BACKEND ---
@@ -45,7 +45,7 @@ export const News = () => {
 
   // --- 2. FUNGSI SHARE DENGAN PREVIEW GAMBAR ---
   const handleShare = async (news: any) => {
-    // SOP: Link khusus yang akan memicu pop-up otomatis saat diklik
+   
     const shareUrl = `${window.location.origin}/?newsId=${news.id}`;
     
     const shareData = {
@@ -58,7 +58,7 @@ export const News = () => {
       if (navigator.share) {
         await navigator.share(shareData);
       } else {
-        // Trik WA: Masukkan link gambar agar WA mencoba mengambil preview-nya
+        // Masukkan link gambar agar WA mencoba mengambil preview-nya
         const waMessage = `*${shareData.title}*\n\nBaca selengkapnya di:\n${shareUrl}\n\nVisual: ${news.gambar_url}`;
         window.open(`https://wa.me/?text=${encodeURIComponent(waMessage)}`, '_blank');
       }
@@ -138,7 +138,7 @@ export const News = () => {
                         <span className="text-[11px] font-black uppercase tracking-[0.3em]">ipb official tv</span>
                     </div>
                     <div className="aspect-video rounded-[2.5rem] overflow-hidden border border-white/10 bg-black shadow-inner">
-                        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/SshHof0K6H0" title="YouTube" frameBorder="0" allowFullScreen className="grayscale-[0.4] hover:grayscale-0 transition-all duration-1000"></iframe>
+                        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/B83_p6gRj-Q" title="YouTube" frameBorder="0" allowFullScreen className="grayscale-[0.4] hover:grayscale-0 transition-all duration-1000"></iframe>
                     </div>
                     <h4 className="font-black uppercase text-[11px] tracking-widest text-white leading-tight">Dokumenter Pendataan Desa Presisi</h4>
                 </div>
@@ -154,7 +154,7 @@ export const News = () => {
         </div>
       </div>
 
-      {/* --- 3. THE IMMERSIVE READER (REFINED SPACING & AUTO-OPEN READY) --- */}
+      {/* --- 3. THE IMMERSIVE READER  --- */}
       {selectedNews && createPortal(
         <div className="fixed inset-0 z-[100000] flex items-center justify-center">
           <div className="absolute inset-0 bg-[#0a0f1a]/98 backdrop-blur-3xl animate-fade-in" onClick={closeNews}></div>
@@ -174,7 +174,7 @@ export const News = () => {
                 </div>
             </div>
 
-            {/* Area Konten Reader (SOP: Spasi lebih padat) */}
+            {/* Area Konten Reader*/}
             <div className="flex-1 overflow-y-auto custom-scrollbar bg-white">
                 <div className="max-w-5xl mx-auto flex flex-col items-center">
                     
@@ -197,7 +197,7 @@ export const News = () => {
                             </div>
                         </div>
 
-                        {/* Narasi Teks (REVISI: Spasi paragraf diperkecil) */}
+                        {/* Narasi Teks */}
                         <div className="text-gray-700 text-lg md:text-xl leading-[1.8] font-medium text-left tracking-normal whitespace-pre-line relative z-10">
                             {selectedNews.isi_artikel.split('\n').map((para: string, i: number) => (
                                 <p key={i} className={`mb-6 ${i === 0 ? "first-letter:text-7xl md:first-letter:text-[9rem] first-letter:font-black first-letter:text-[#E3242B] first-letter:mr-4 first-letter:float-left first-letter:leading-none first-letter:mt-2" : ""}`}>
