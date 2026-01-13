@@ -43,11 +43,18 @@ export const News = () => {
     fetchData();
   }, [searchParams]);
 
+<<<<<<< HEAD
   // --- 2. FUNGSI SHARE DENGAN PREVIEW GAMBAR ---
   const handleShare = async (news: any) => {
    
     const shareUrl = `${window.location.origin}/?newsId=${news.id}`;
     
+=======
+  // --- 2. FUNGSI SHARE (DIUBAH) ---
+  const handleShare = async (news: any) => {
+    const shareUrl = `${window.location.origin}/share/news/${news.id}`;
+
+>>>>>>> 24c95fb (Update ddp_public (UX + links + fixes))
     const shareData = {
       title: news.judul_artikel,
       text: `[WARTA DDP] ${news.judul_artikel}`,
@@ -58,15 +65,26 @@ export const News = () => {
       if (navigator.share) {
         await navigator.share(shareData);
       } else {
+<<<<<<< HEAD
         // Masukkan link gambar agar WA mencoba mengambil preview-nya
         const waMessage = `*${shareData.title}*\n\nBaca selengkapnya di:\n${shareUrl}\n\nVisual: ${selectedNews.gambar_url}`;
         window.open(`https://wa.me/?text=${encodeURIComponent(waMessage)}`, '_blank');
       }
     } catch (err) {
+=======
+        const waMessage = `*${shareData.title}*\n\nBaca selengkapnya di:\n${shareUrl}`;
+        window.open(`https://wa.me/?text=${encodeURIComponent(waMessage)}`, "_blank");
+      }
+    } catch {
+>>>>>>> 24c95fb (Update ddp_public (UX + links + fixes))
       console.log("Share dibatalkan.");
     }
   };
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 24c95fb (Update ddp_public (UX + links + fixes))
   const closeNews = () => {
     setSelectedNews(null);
     setSearchParams({}); // Bersihkan URL agar kembali normal
