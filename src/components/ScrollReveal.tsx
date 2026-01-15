@@ -27,11 +27,12 @@ export const ScrollReveal = ({ children, delay = 0, direction = 'up' }: Props) =
         y: 0, 
         x: 0 
       }}
-      viewport={{ once: true, margin: "-100px" }}
+      // SOP: Menggunakan amount 0.2 agar animasi langsung jalan saat 20% bagian muncul
+      viewport={{ once: true, amount: 0.2 }}
       transition={{ 
         duration: 0.8, 
         delay: delay, 
-        ease: [0.21, 0.47, 0.32, 0.98] // Executive easing (Smooth)
+        ease: [0.21, 0.47, 0.32, 0.98] 
       }}
     >
       {children}
