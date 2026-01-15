@@ -8,7 +8,7 @@
   --color-crimson: #E3242B;
   
   /* 2. UBAH VARIABLE FONT DI SINI */
-  --font-sans: "Inter", sans-serif;
+  --font-sans: "Poppins", sans-serif;
 }
 
 @layer base {
