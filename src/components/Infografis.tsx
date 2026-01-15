@@ -6,6 +6,7 @@ import {
   X, FileCheck, Download, Send, BarChart3, Zap, Info, Tag, ShieldCheck 
 } from 'lucide-react';
 import { api, getStorageUrl } from '../api';
+import { ScrollReveal } from './ScrollReveal'; // SOP: Menambahkan import animasi
 
 export const Infografis = () => {
   // --- STATE MANAGEMENT ---
@@ -78,68 +79,72 @@ export const Infografis = () => {
       
       <div className="max-w-7xl mx-auto relative z-10">
         
-        {/* --- 1. HEADER --- */}
-        <div className="flex flex-col lg:flex-row justify-between items-center lg:items-end gap-8 mb-16 pb-10 border-b border-gray-100">
-          <div className="space-y-3 text-center lg:text-left">
-            <div className="flex items-center justify-center lg:justify-start gap-3">
-               <div className="p-1.5 bg-[#E3242B]/10 rounded-lg text-[#E3242B]"><FileCheck size={16}/></div>
-               <span className="text-[10px] font-bold text-[#E3242B] uppercase tracking-widest">Tersedia {totalCount} Materi Infografis</span>
+        {/* --- 1. HEADER (ANIMATED) --- */}
+        <ScrollReveal>
+          <div className="flex flex-col lg:flex-row justify-between items-center lg:items-end gap-8 mb-16 pb-10 border-b border-gray-100">
+            <div className="space-y-3 text-center lg:text-left">
+              <div className="flex items-center justify-center lg:justify-start gap-3">
+                 <div className="p-1.5 bg-[#E3242B]/10 rounded-lg text-[#E3242B] text-left"><FileCheck size={16}/></div>
+                 <span className="text-[10px] font-bold text-[#E3242B] uppercase tracking-widest">Tersedia {totalCount} Materi Infografis</span>
+              </div>
+              <h2 className="text-3xl md:text-4xl font-black text-[#111827] tracking-tighter leading-none text-center lg:text-left">
+                Katalog <span className="text-[#E3242B]">Infografis</span>
+              </h2>
+              <p className="text-gray-500 font-medium text-sm max-w-md leading-relaxed text-center lg:text-left">
+                Memahami data desa menjadi lebih mudah melalui sajian visual yang presisi, informatif, dan transparan.
+              </p>
             </div>
-            <h2 className="text-3xl md:text-4xl font-black text-[#111827] tracking-tighter leading-none">
-              Katalog <span className="text-[#E3242B]">Infografis</span>
-            </h2>
-            <p className="text-gray-500 font-medium text-sm max-w-md leading-relaxed">
-              Memahami data desa menjadi lebih mudah melalui sajian visual yang presisi, informatif, dan transparan.
-            </p>
+            
+            <Link to="/infografis" className="group flex items-center gap-4 bg-[#111827] text-white px-8 py-4 rounded-xl font-bold text-xs hover:bg-[#E3242B] transition-all shadow-xl active:scale-95">
+              Lihat Semua Koleksi <ArrowUpRight size={16} className="group-hover:rotate-45 transition-transform" />
+            </Link>
           </div>
-          
-          <Link to="/infografis" className="group flex items-center gap-4 bg-[#111827] text-white px-8 py-4 rounded-xl font-bold text-xs hover:bg-[#E3242B] transition-all shadow-xl active:scale-95">
-            Lihat Semua Koleksi <ArrowUpRight size={16} className="group-hover:rotate-45 transition-transform" />
-          </Link>
-        </div>
+        </ScrollReveal>
 
-        {/* --- 2. GRID 4 KARTU --- */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {items.map((item) => (
-            <div 
-              key={item.id} 
-              onClick={() => { setSelectedAlbum(item); setModalIdx(0); }}
-              className="group bg-white rounded-[2.5rem] border border-gray-100 p-4 shadow-sm hover:shadow-[0_30px_60px_rgba(0,0,0,0.08)] transition-all duration-700 flex flex-col h-full cursor-pointer"
-            >
-              <div className="relative aspect-[4/5] rounded-[2rem] overflow-hidden bg-gray-50 border border-gray-50 mb-6 shrink-0">
-                <img
-                  src={Array.isArray(item.gambar_urls) ? item.gambar_urls[0] : item.gambar_urls}
-                  className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-[1500ms]"
-                  alt={item.judul}
-                />
-                <div className="absolute inset-0 bg-[#111827]/40 opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center backdrop-blur-[2px]">
-                    <div className="bg-white p-4 rounded-2xl shadow-2xl scale-75 group-hover:scale-100 transition-all duration-500">
-                        <Maximize2 className="text-[#E3242B]" size={24} />
-                    </div>
+        {/* --- 2. GRID 4 KARTU (ANIMATED DELAY 0.2) --- */}
+        <ScrollReveal delay={0.2}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {items.map((item) => (
+              <div 
+                key={item.id} 
+                onClick={() => { setSelectedAlbum(item); setModalIdx(0); }}
+                className="group bg-white rounded-[2.5rem] border border-gray-100 p-4 shadow-sm hover:shadow-[0_30px_60px_rgba(0,0,0,0.08)] transition-all duration-700 flex flex-col h-full cursor-pointer"
+              >
+                <div className="relative aspect-[4/5] rounded-[2rem] overflow-hidden bg-gray-50 border border-gray-50 mb-6 shrink-0">
+                  <img
+                    src={Array.isArray(item.gambar_urls) ? item.gambar_urls[0] : item.gambar_urls}
+                    className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-[1500ms]"
+                    alt={item.judul}
+                  />
+                  <div className="absolute inset-0 bg-[#111827]/40 opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center backdrop-blur-[2px]">
+                      <div className="bg-white p-4 rounded-2xl shadow-2xl scale-75 group-hover:scale-100 transition-all duration-500">
+                          <Maximize2 className="text-[#E3242B]" size={24} />
+                      </div>
+                  </div>
+                  <div className="absolute top-4 right-4 bg-black/50 backdrop-blur-md text-white text-[9px] font-bold px-3 py-1 rounded-full tracking-wider">
+                    {item.gambar.length} Halaman
+                  </div>
                 </div>
-                <div className="absolute top-4 right-4 bg-black/50 backdrop-blur-md text-white text-[9px] font-bold px-3 py-1 rounded-full tracking-wider">
-                  {item.gambar.length} Halaman
+
+                <div className="px-2 pb-2 space-y-4 flex-grow flex flex-col justify-between text-left">
+                  <div>
+                      <h4 className="text-[#111827] font-bold text-sm tracking-tight line-clamp-2 leading-tight group-hover:text-[#E3242B] transition-colors mb-3">
+                          {item.judul}
+                      </h4>
+                      <p className="text-[11px] text-gray-400 font-medium leading-relaxed line-clamp-3 border-l-2 border-gray-100 pl-3">
+                          {item.keterangan || "Analisis visual terpadu hasil riset Laboratory Data Desa Presisi."}
+                      </p>
+                  </div>
+                  
+                  <div className="pt-4 border-t border-gray-50 flex justify-between items-center text-gray-300">
+                      <span className="text-[9px] font-bold uppercase tracking-widest">{item.kategori || 'Analitik'}</span>
+                      <BarChart3 size={14} />
+                  </div>
                 </div>
               </div>
-
-              <div className="px-2 pb-2 space-y-4 flex-grow flex flex-col justify-between">
-                <div>
-                    <h4 className="text-[#111827] font-bold text-sm tracking-tight line-clamp-2 leading-tight group-hover:text-[#E3242B] transition-colors mb-3">
-                        {item.judul}
-                    </h4>
-                    <p className="text-[11px] text-gray-400 font-medium leading-relaxed line-clamp-3 border-l-2 border-gray-100 pl-3">
-                        {item.keterangan || "Analisis visual terpadu hasil riset Laboratory Data Desa Presisi."}
-                    </p>
-                </div>
-                
-                <div className="pt-4 border-t border-gray-50 flex justify-between items-center text-gray-300">
-                    <span className="text-[9px] font-bold uppercase tracking-widest">{item.kategori || 'Analitik'}</span>
-                    <BarChart3 size={14} />
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        </ScrollReveal>
       </div>
 
       {/* --- 3. PREMIUM LIGHTBOX --- */}
@@ -177,11 +182,11 @@ export const Infografis = () => {
                         <Zap size={16} className="text-[#E3242B] fill-[#E3242B]" />
                         <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Informasi Data</span>
                     </div>
-                    <button onClick={() => setSelectedAlbum(null)} className="p-2 text-gray-300 hover:text-[#E3242B] hover:bg-red-50 rounded-full transition-all"><X size={24}/></button>
+                    <button onClick={() => setSelectedAlbum(null)} className="p-2 text-gray-300 hover:text-[#E3242B] hover:bg-red-50 rounded-full transition-all text-left"><X size={24}/></button>
                 </div>
 
-                <div className="flex-1 overflow-y-auto custom-scrollbar p-10 space-y-10">
-                    <div className="space-y-4 text-left">
+                <div className="flex-1 overflow-y-auto custom-scrollbar p-10 space-y-10 text-left">
+                    <div className="space-y-4">
                         <h2 className="text-2xl font-black text-[#111827] tracking-tight leading-tight">{selectedAlbum.judul}</h2>
                         <div className="h-1 w-12 bg-[#E3242B] rounded-full"></div>
                         <p className="text-gray-500 font-medium text-sm leading-relaxed text-justify">
@@ -189,12 +194,12 @@ export const Infografis = () => {
                         </p>
                     </div>
 
-                    <div className="bg-gray-50 p-6 rounded-[2rem] border border-gray-100">
+                    <div className="bg-gray-50 p-6 rounded-[2rem] border border-gray-100 text-left">
                         <div className="flex items-center gap-3 text-emerald-600 mb-2">
                             <ShieldCheck size={16} />
                             <span className="text-[9px] font-bold uppercase tracking-widest">Arsip Terverifikasi</span>
                         </div>
-                        <p className="text-[11px] font-medium text-gray-500 leading-relaxed">
+                        <p className="text-[11px] font-medium text-gray-500 leading-relaxed text-left">
                             Data ini telah melewati proses validasi saintifik untuk menjamin akurasi informasi bagi publik.
                         </p>
                     </div>

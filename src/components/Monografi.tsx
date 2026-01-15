@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { BookOpen, ArrowUpRight, FileCheck, X, Send, ShieldCheck, Info } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { api, getStorageUrl } from '../api';
+import { ScrollReveal } from './ScrollReveal'; // SOP: Menambahkan import animasi
 
 export const Monografi = () => {
   const [items, setItems] = useState<any[]>([]);
@@ -59,61 +60,65 @@ export const Monografi = () => {
   );
 
   return (
-    <section id="monografi" className="py-24 bg-white px-6 lg:px-24 relative overflow-hidden selection:bg-[#E3242B] selection:text-white">
+    <section id="monografi" className="py-24 bg-white px-6 lg:px-24 relative overflow-hidden selection:bg-[#E3242B] selection:text-white text-left">
       {/* Decorative Glow */}
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gray-50 rounded-full blur-[120px] -z-0 opacity-40 translate-x-1/2 -translate-y-1/2"></div>
 
       <div className="max-w-7xl mx-auto relative z-10">
         
-        {/* --- 1. HEADER --- */}
-        <div className="flex flex-col lg:flex-row justify-between items-center lg:items-end gap-8 mb-16 pb-10 border-b border-gray-100">
-          <div className="space-y-3 text-center lg:text-left">
-            <div className="flex items-center justify-center lg:justify-start gap-2">
-               <span className="text-[11px] font-bold text-[#E3242B] tracking-wider uppercase">Repositori Digital</span>
+        {/* --- 1. HEADER (ANIMATED) --- */}
+        <ScrollReveal>
+          <div className="flex flex-col lg:flex-row justify-between items-center lg:items-end gap-8 mb-16 pb-10 border-b border-gray-100">
+            <div className="space-y-3 text-center lg:text-left">
+              <div className="flex items-center justify-center lg:justify-start gap-2">
+                 <span className="text-[11px] font-bold text-[#E3242B] tracking-wider uppercase">Repositori Digital</span>
+              </div>
+              <h2 className="text-3xl md:text-4xl font-black text-[#111827] tracking-tighter leading-none">
+                Katalog <span className="text-[#E3242B]">Monografi</span>
+              </h2>
+              <p className="text-gray-500 font-medium text-sm max-w-md leading-relaxed">
+                Arsip profil desa yang terverifikasi untuk mendukung pembangunan berbasis data dan fakta.
+              </p>
             </div>
-            <h2 className="text-3xl md:text-4xl font-black text-[#111827] tracking-tighter leading-none">
-              Katalog <span className="text-[#E3242B]">Monografi</span>
-            </h2>
-            <p className="text-gray-500 font-medium text-sm max-w-md leading-relaxed">
-              Arsip profil desa yang terverifikasi untuk mendukung pembangunan berbasis data dan fakta.
-            </p>
+            
+            <Link to="/monografi" className="group flex items-center gap-4 bg-[#111827] text-white px-8 py-4 rounded-xl font-bold text-xs tracking-wide hover:bg-[#E3242B] transition-all shadow-xl active:scale-95">
+              Telusuri Semua Monografi <ArrowUpRight size={16} className="group-hover:rotate-45 transition-transform" />
+            </Link>
           </div>
-          
-          <Link to="/monografi" className="group flex items-center gap-4 bg-[#111827] text-white px-8 py-4 rounded-xl font-bold text-xs tracking-wide hover:bg-[#E3242B] transition-all shadow-xl active:scale-95">
-            Telusuri Semua Monografi <ArrowUpRight size={16} className="group-hover:rotate-45 transition-transform" />
-          </Link>
-        </div>
+        </ScrollReveal>
 
-        {/* --- 2. GRID BUKU --- */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 md:gap-10">
-          {items.map((item) => (
-            <div key={item.id} className="group cursor-pointer flex flex-col h-full" onClick={() => handleOpenForm(item)}>
-              <div className="relative aspect-[3/4.2] rounded-[2rem] overflow-hidden shadow-lg group-hover:shadow-[0_30px_60px_rgba(0,0,0,0.12)] transition-all duration-700 border-4 border-white bg-gray-50">
-                <img 
-                    src={item.gambar_url} 
-                    alt={`Sampul Monografi ${item.desa}`} 
-                    className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" 
-                />
+        {/* --- 2. GRID BUKU (ANIMATED DELAY 0.2) --- */}
+        <ScrollReveal delay={0.2}>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 md:gap-10">
+            {items.map((item) => (
+              <div key={item.id} className="group cursor-pointer flex flex-col h-full" onClick={() => handleOpenForm(item)}>
+                <div className="relative aspect-[3/4.2] rounded-[2rem] overflow-hidden shadow-lg group-hover:shadow-[0_30px_60px_rgba(0,0,0,0.12)] transition-all duration-700 border-4 border-white bg-gray-50">
+                  <img 
+                      src={item.gambar_url} 
+                      alt={`Sampul Monografi ${item.desa}`} 
+                      className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" 
+                  />
+                  
+                  {/* Immersive Overlay */}
+                  <div className="absolute inset-0 bg-[#111827]/60 opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-6 backdrop-blur-[2px]">
+                      <div className="w-10 h-10 bg-[#E3242B] rounded-xl flex items-center justify-center text-white mb-3 shadow-lg"><BookOpen size={20} /></div>
+                      <p className="text-white font-bold text-[11px] tracking-wide">Baca Dokumen</p>
+                  </div>
+                </div>
                 
-                {/* Immersive Overlay */}
-                <div className="absolute inset-0 bg-[#111827]/60 opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-6 backdrop-blur-[2px]">
-                    <div className="w-10 h-10 bg-[#E3242B] rounded-xl flex items-center justify-center text-white mb-3 shadow-lg"><BookOpen size={20} /></div>
-                    <p className="text-white font-bold text-[11px] tracking-wide">Baca Dokumen</p>
+                <div className="mt-6 text-center lg:text-left space-y-1 px-1">
+                  <h4 className="text-[#111827] font-bold text-sm tracking-tight leading-tight line-clamp-2 group-hover:text-[#E3242B] transition-colors">
+                      {item.desa}
+                  </h4>
+                  <div className="flex items-center justify-center lg:justify-start gap-2 opacity-60">
+                      <div className="h-px w-4 bg-[#111827]"></div>
+                      <span className="text-[10px] font-bold text-[#111827] tracking-wider">Tahun {item.tahun}</span>
+                  </div>
                 </div>
               </div>
-              
-              <div className="mt-6 text-center lg:text-left space-y-1 px-1">
-                <h4 className="text-[#111827] font-bold text-sm tracking-tight leading-tight line-clamp-2 group-hover:text-[#E3242B] transition-colors">
-                    {item.desa}
-                </h4>
-                <div className="flex items-center justify-center lg:justify-start gap-2 opacity-60">
-                    <div className="h-px w-4 bg-[#111827]"></div>
-                    <span className="text-[10px] font-bold text-[#111827] tracking-wider">Tahun {item.tahun}</span>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        </ScrollReveal>
       </div>
 
       {/* --- 3. MODAL VERIFIKASI --- */}
