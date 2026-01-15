@@ -27,8 +27,8 @@ export const ScrollReveal = ({ children, delay = 0, direction = 'up' }: Props) =
         y: 0, 
         x: 0 
       }}
-      // SOP: Menggunakan amount 0.2 agar animasi langsung jalan saat 20% bagian muncul
-      viewport={{ once: true, amount: 0.2 }}
+      // once: false agar animasi berulang setiap di-scroll
+      viewport={{ once: false, amount: 0.2 }}
       transition={{ 
         duration: 0.8, 
         delay: delay, 

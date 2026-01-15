@@ -7,7 +7,7 @@ import {
   Award, CheckCircle2, Search, Zap
 } from 'lucide-react';
 import { api } from '../api';
-import { ScrollReveal } from './ScrollReveal'; // Pastikan Import ini Ada
+import { ScrollReveal } from './ScrollReveal';
 
 const Counter = ({ value, duration = 2500 }: { value: any, duration?: number }) => {
   const [count, setCount] = useState(0);
@@ -37,11 +37,11 @@ const Counter = ({ value, duration = 2500 }: { value: any, duration?: number }) 
 
 const statsConfig = [
   { label: 'Desa', key: 'desa', icon: Map, info: 'Cakupan wilayah administratif pedesaan' },
-  { label: 'Dusun', key: 'dusun', icon: Database, info: 'Unit basis data terkecil tingkat desa' },
+  { label: 'Dusun', key: 'dusun', icon: Database, info: 'Unit basis data tingkat desa' },
   { label: 'Kelurahan', key: 'kelurahan', icon: Building2, info: 'Wilayah administratif perkotaan' },
   { label: 'RW', key: 'rw', icon: Home, info: 'Struktur koordinasi lingkungan warga' },
-  { label: 'Keluarga', key: 'kk', icon: Users, info: 'Total Kepala Keluarga terdata valid' },
-  { label: 'Jiwa', key: 'jiwa', icon: Users2, info: 'Total populasi termutakhir secara presisi' },
+  { label: 'Keluarga', key: 'kk', icon: Users, info: 'Total Kepala Keluarga valid' },
+  { label: 'Jiwa', key: 'jiwa', icon: Users2, info: 'Total populasi secara presisi' },
 ];
 
 export const Statistics = () => {
@@ -70,7 +70,8 @@ export const Statistics = () => {
   useEffect(() => {
     if (scrollRef.current) {
       const isMobile = window.innerWidth < 768;
-      const cardWidth = isMobile ? (260 + 16) : (320 + 24); 
+      // SOP: cardWidth disesuaikan agar 4 kartu muat di desktop
+      const cardWidth = isMobile ? (260 + 16) : (280 + 20); 
       scrollRef.current.scrollTo({
         left: activeIndex * cardWidth - (scrollRef.current.clientWidth / 2) + (cardWidth / 2),
         behavior: 'smooth'
@@ -112,7 +113,7 @@ export const Statistics = () => {
       
       <div className="max-w-7xl mx-auto px-6 lg:px-24 relative z-10">
         
-        {/* --- 1. HEADER (ANIMATED) --- */}
+        {/* --- 1. HEADER --- */}
         <ScrollReveal>
           <div className="flex flex-col lg:flex-row justify-between items-center lg:items-end gap-8 mb-16 pb-10 border-b border-gray-100">
             <div className="space-y-3 text-center lg:text-left">
@@ -138,13 +139,12 @@ export const Statistics = () => {
           </div>
         </ScrollReveal>
 
-        {/* --- 2. STATS SLIDER (ANIMATED & FIXED CLIPPING) --- */}
+        {/* --- 2. STATS SLIDER (GRID 4 DESKTOP) --- */}
         <ScrollReveal delay={0.2} direction="right">
           <div className="relative">
-            {/* FIX: Tambah px-[5%] pada desktop (md:px-[5%]) agar scale-110 tidak terpotong */}
             <div 
               ref={scrollRef}
-              className="flex overflow-x-auto gap-4 md:gap-6 pb-32 no-scrollbar pt-12 px-[10%] md:px-[5%]"
+              className="flex overflow-x-auto gap-4 md:gap-5 pb-32 no-scrollbar pt-12 px-[10%] md:px-[2%]"
               style={{ scrollSnapType: 'x mandatory' }}
             >
               {statsConfig.map((item, index) => {
@@ -152,29 +152,30 @@ export const Statistics = () => {
                 return (
                   <div 
                     key={index}
-                    className={`min-w-[260px] md:min-w-[320px] snap-center bg-white p-10 md:p-12 rounded-[3.5rem] border transition-all duration-700 flex flex-col items-center text-center relative
+                    // SOP: md:min-w-[280px] agar 4 kartu muat di container desktop
+                    className={`min-w-[260px] md:min-w-[280px] snap-center bg-white p-8 md:p-10 rounded-[3.5rem] border transition-all duration-700 flex flex-col items-center text-center relative
                       ${isActive 
-                        ? 'scale-110 z-20 border-[#E3242B] shadow-[0_40px_100px_rgba(227,36,43,0.2)] opacity-100' 
+                        ? 'scale-110 z-20 border-[#E3242B] shadow-[0_40px_100px_rgba(227,36,43,0.15)] opacity-100' 
                         : 'scale-90 opacity-20 border-gray-50 blur-[2px] md:blur-[1px]'
                       }`}
                   >
                     {isActive && (
-                      <div className="absolute -top-5 bg-[#E3242B] text-white text-[7px] md:text-[8px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest shadow-lg animate-bounce whitespace-nowrap">
-                        Data Terverifikasi
+                      <div className="absolute -top-4 bg-[#E3242B] text-white text-[7px] md:text-[8px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest shadow-lg animate-bounce whitespace-nowrap">
+                        Terverifikasi
                       </div>
                     )}
 
-                    <div className={`w-16 h-16 md:w-20 md:h-20 rounded-3xl flex items-center justify-center mb-6 md:mb-8 transition-all duration-500
+                    <div className={`w-14 h-14 md:w-16 md:h-16 rounded-2xl md:rounded-3xl flex items-center justify-center mb-6 md:mb-8 transition-all duration-500
                       ${isActive ? 'bg-[#E3242B] text-white rotate-[10deg] scale-110' : 'bg-gray-50 text-gray-400'}`}>
                       <item.icon size={isActive ? 32 : 28} />
                     </div>
 
                     <div className="space-y-1 relative z-10">
-                      <h3 className={`text-5xl md:text-6xl font-black tracking-tighter transition-colors duration-500
+                      <h3 className={`text-5xl md:text-5xl font-black tracking-tighter transition-colors duration-500
                         ${isActive ? 'text-[#E3242B]' : 'text-[#111827]'}`}>
                         <Counter value={dbData ? dbData[item.key] : 0} />
                       </h3>
-                      <p className={`text-[10px] md:text-[12px] font-black uppercase tracking-[0.4em] md:tracking-[0.5em] mt-2 
+                      <p className={`text-[10px] md:text-[11px] font-black uppercase tracking-[0.4em] mt-2 
                         ${isActive ? 'text-gray-800' : 'text-gray-400'}`}>{item.label}</p>
                       
                       <p className={`text-[8px] md:text-[9px] font-bold text-gray-400 uppercase tracking-widest mt-4 md:mt-6 transition-all duration-1000 leading-relaxed
@@ -189,7 +190,7 @@ export const Statistics = () => {
           </div>
         </ScrollReveal>
 
-        {/* --- 3. DEMOGRAPHIC (ANIMATED) --- */}
+        {/* --- 3. DEMOGRAPHIC --- */}
         <ScrollReveal delay={0.4}>
           <div className="grid grid-cols-1 gap-8">
               <div className="bg-[#111827] rounded-[3rem] md:rounded-[4rem] p-8 md:p-16 text-white relative overflow-hidden shadow-2xl border border-white/5">
