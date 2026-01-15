@@ -40,8 +40,8 @@ const statsConfig = [
   { label: 'Dusun', key: 'dusun', icon: Database, info: 'Unit basis data tingkat desa' },
   { label: 'Kelurahan', key: 'kelurahan', icon: Building2, info: 'Wilayah administratif perkotaan' },
   { label: 'RW', key: 'rw', icon: Home, info: 'Struktur koordinasi lingkungan warga' },
-  { label: 'Keluarga', key: 'kk', icon: Users, info: 'Total Kepala Keluarga valid' },
-  { label: 'Jiwa', key: 'jiwa', icon: Users2, info: 'Total populasi secara presisi' },
+  { label: 'Keluarga', key: 'kk', icon: Users, info: 'Total Kepala Keluarga' },
+  { label: 'Jiwa', key: 'jiwa', icon: Users2, info: 'Total populasi' },
 ];
 
 export const Statistics = () => {
@@ -70,7 +70,7 @@ export const Statistics = () => {
   useEffect(() => {
     if (scrollRef.current) {
       const isMobile = window.innerWidth < 768;
-      // SOP: cardWidth disesuaikan agar 4 kartu muat di desktop
+      // 
       const cardWidth = isMobile ? (260 + 16) : (280 + 20); 
       scrollRef.current.scrollTo({
         left: activeIndex * cardWidth - (scrollRef.current.clientWidth / 2) + (cardWidth / 2),
@@ -123,7 +123,7 @@ export const Statistics = () => {
               <h2 className="text-3xl md:text-4xl font-black text-[#111827] tracking-tighter uppercase leading-none">
                 Capaian <span className="text-[#E3242B]">Pendataan</span>
               </h2>
-              <p className="text-gray-500 font-bold text-[10px] md:text-xs uppercase tracking-widest max-w-md leading-relaxed">
+              <p className="text-gray-500 font-bold text-[10px] md:text-xs tracking-widest max-w-md leading-relaxed">
                 Bekerja sama dengan masyarakat di <span className="text-[#111827] font-black">{totalWilayah}</span> Desa & Kelurahan seluruh Indonesia.
               </p>
             </div>
@@ -160,7 +160,7 @@ export const Statistics = () => {
                       }`}
                   >
                     {isActive && (
-                      <div className="absolute -top-4 bg-[#E3242B] text-white text-[7px] md:text-[8px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest shadow-lg animate-bounce whitespace-nowrap">
+                      <div className="absolute -top-4 bg-[#E3242B] text-white text-[7px] md:text-[8px] font-black px-4 py-1.5 rounded-full tracking-widest shadow-lg animate-bounce whitespace-nowrap">
                         Terverifikasi
                       </div>
                     )}
@@ -175,7 +175,7 @@ export const Statistics = () => {
                         ${isActive ? 'text-[#E3242B]' : 'text-[#111827]'}`}>
                         <Counter value={dbData ? dbData[item.key] : 0} />
                       </h3>
-                      <p className={`text-[10px] md:text-[11px] font-black uppercase tracking-[0.4em] mt-2 
+                      <p className={`text-[10px] md:text-[11px] font-black tracking-[0.4em] mt-2 
                         ${isActive ? 'text-gray-800' : 'text-gray-400'}`}>{item.label}</p>
                       
                       <p className={`text-[8px] md:text-[9px] font-bold text-gray-400 uppercase tracking-widest mt-4 md:mt-6 transition-all duration-1000 leading-relaxed
@@ -201,9 +201,9 @@ export const Statistics = () => {
                           <div className="space-y-3">
                               <div className="flex items-center gap-2 text-[#E3242B]">
                                   <Zap size={14} fill="currentColor" />
-                                  <h4 className="font-black text-xl md:text-2xl uppercase tracking-tighter">Rasio Demografi Nasional</h4>
+                                  <h4 className="font-black text-xl md:text-2xl uppercase tracking-tighter">Rasio Demografi </h4>
                               </div>
-                              <p className="text-gray-400 text-[9px] font-bold uppercase tracking-[0.3em] opacity-60 leading-relaxed">Visualisasi Distribusi Gender Terintegrasi</p>
+                              <p className="text-gray-400 text-[9px] font-bold tracking-[0.3em] opacity-60 leading-relaxed">Visualisasi Distribusi Gender Terintegrasi</p>
                           </div>
                           
                           <div className="space-y-8">
@@ -245,7 +245,7 @@ export const Statistics = () => {
                               </h5>
                               <p className="text-[10px] md:text-[12px] font-black text-[#E3242B] uppercase tracking-[0.4em] md:tracking-[0.5em]">Indeks Gender</p>
                           </div>
-                          <p className="text-[8px] md:text-[10px] text-gray-500 uppercase font-bold tracking-[0.2em] px-4 md:px-8 relative z-10 leading-relaxed">
+                          <p className="text-[8px] md:text-[10px] text-gray-500 font-bold tracking-[0.2em] px-4 md:px-8 relative z-10 leading-relaxed">
                               Rasio Jenis Kelamin per 100 Perempuan Terintegrasi Lab DDP IPB University
                           </p>
                       </div>
