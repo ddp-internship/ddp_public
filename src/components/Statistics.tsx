@@ -199,7 +199,7 @@ export const Statistics = () => {
                         <div className="space-y-3">
                             <div className="flex items-center gap-2 text-[#E3242B]">
                                 <Zap size={14} fill="currentColor" />
-                                <h4 className="font-black text-2xl uppercase tracking-tighter">Rasio Demografi Nasional</h4>
+                                <h4 className="font-black text-2xl uppercase tracking-tighter">Rasio Demografi</h4>
                             </div>
                             <p className="text-gray-400 text-[10px] font-bold uppercase tracking-[0.3em] opacity-60">Visualisasi Distribusi Gender Secara Komprehensif</p>
                         </div>
